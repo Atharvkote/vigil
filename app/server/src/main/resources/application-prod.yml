@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vigilsense}
+    username: ${SPRING_DATASOURCE_USERNAME:vigilsense_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:vigilsense_password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: INFO
+    com.vigilsense: INFO

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: vigil-sense-db
+    environment:
+      POSTGRES_DB: vigilsense
+      POSTGRES_USER: vigilsense_user
+      POSTGRES_PASSWORD: vigilsense_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vigilsense_user -d vigilsense"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: vigil-sense-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/vigilsense
+      - SPRING_DATASOURCE_USERNAME=vigilsense_user
+      - SPRING_DATASOURCE_PASSWORD=vigilsense_password
+      - VIGILSENSE_WEATHER_PROVIDER_URL=https://api.open-meteo.com/v1/forecast
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

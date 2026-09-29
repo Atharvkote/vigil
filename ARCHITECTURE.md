@@ -1,5 +1,7 @@
 # VigilSense System Architecture Specification
 
+> For the operational user manual, step-by-step GUI walkthrough, and standard operating procedures, see **[WORKFLOW.md](WORKFLOW.md)**.
+
 ## 1. Architectural Overview & Design Philosophy
 
 **VigilSense** is designed as a mission-critical, cyber-physical intelligence platform for Perimeter Intrusion Detection Systems (PIDS). Perimeter security systems operate in hostile physical environments where false positives (False Alarm Rate - FAR) erode operator trust, and false negatives (Nuisance Alarm Rate - NAR) create catastrophic physical security breaches.
@@ -15,7 +17,6 @@ The architectural principles governing VigilSense include:
 4. **Immutable Audit Trails**:
    Every parameter evaluation, modification proposal, and manual override is logged through Spring AOP interceptors into tamper-evident storage for forensic accountability.
 
----
 
 ## 2. High-Level System Architecture
 
@@ -36,7 +37,7 @@ flowchart TD
 
     subgraph Backend ["Tier 2: Application Service Layer (Port 8081)"]
         Gateway["Spring MVC REST Dispatcher (/api/v1/*)"]
-        
+
         subgraph Services ["Core Business Services"]
             SiteService["SiteService"]
             SensorService["SensorService & ProfileService"]
@@ -57,25 +58,30 @@ flowchart TD
         Postgres[("PostgreSQL 15+ (HikariCP Connection Pool)")]
         Flyway["Flyway Migration Engine (V1 - V9)"]
         OpenMeteo["Open-Meteo Atmospheric Weather API (TLS 1.3)"]
+        OSM["OpenStreetMap Tile Server"]
     end
 
     SPA -->|JSON REST Requests| Gateway
+
     Gateway --> Services
+
     AuditAspect -.->|Intercepts| Services
     LoggingAspect -.->|Measures| Services
+    GlobalExceptionHandler -.->|Handles Exceptions| Gateway
 
     SiteService --> Postgres
     SensorService --> Postgres
     WeatherService --> Postgres
-    WeatherService -->|Outbound HTTPS (5s Connect, 10s Read)| OpenMeteo
+    WeatherService -->|Outbound HTTPS<br/>5s Connect / 10s Read| OpenMeteo
     Engine --> Postgres
     AiService --> Postgres
     AnalyticsService --> Postgres
-    Flyway --> Postgres
-    LeafletMap -.->|Tile Requests| OpenMeteo
+
+    Flyway -->|Schema Migrations| Postgres
+
+    LeafletMap -.->|Map Tile Requests| OSM
 ```
 
----
 
 ## 3. Component Deep Dive
 
@@ -120,7 +126,6 @@ flowchart TD
   - `V8__create_calibration_recommendations.sql`: Generated tuning proposals and operator review status.
   - `V9__create_ai_analysis.sql`: NLP explanation logs and reasoning records.
 
----
 
 ## 4. Entity Relationship Diagram (ERD)
 
@@ -227,7 +232,6 @@ erDiagram
     }
 ```
 
----
 
 ## 5. Calibration Recommendation Pipeline
 
@@ -267,7 +271,6 @@ sequenceDiagram
     Client-->>Operator: Display Recommended Value, Bounds, and NLP Justification
 ```
 
----
 
 ## 6. Safety Pinning & Clamping Algorithm
 
@@ -282,7 +285,6 @@ Where:
 
 If $V_{\text{proposed}} == V_{\text{current}}$, the action is resolved to `MAINTAIN` with a status indicating that the sensor is already at optimal boundary bounds for the current environmental conditions.
 
----
 
 ## 7. Geospatial Continuous Contour Perimeter Model
 
@@ -295,7 +297,6 @@ Perimeter security requires clear spatial containment to differentiate between w
 3. **Core Facility Zone (Radius: 150m)**:
    Physical boundary fence and inner sterile zone. Highest criticality; any sensor desensitization in this zone is strictly constrained to prevent physical defeat.
 
----
 
 ## 8. Resilience, Observability & Performance
 

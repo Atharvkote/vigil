@@ -6,14 +6,18 @@ import {
   CloudSun, 
   RotateCw,
   Plus,
-  ArrowRight
+  ArrowRight,
+  Terminal,
+  BookOpen,
+  ExternalLink
 } from 'lucide-react';
-import type { Site, Sensor, WeatherRecord, CalibrationRecommendation, SensorProfile } from '../types';
+import type { Site, Sensor, WeatherRecord, CalibrationRecommendation, SensorProfile, SystemLog } from '../types';
 import { sitesApi } from '../api/sites.api';
 import { sensorsApi } from '../api/sensors.api';
 import { weatherApi } from '../api/weather.api';
 import { calibrationApi } from '../api/calibration.api';
 import { profilesApi } from '../api/profiles.api';
+import { systemApi } from '../api/system.api';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { Skeleton, CardSkeleton } from '../components/common/Skeleton';
@@ -45,6 +49,7 @@ export function Dashboard({
   const [profiles, setProfiles] = useState<SensorProfile[]>([]);
   const [weather, setWeather] = useState<WeatherRecord | null>(null);
   const [recommendations, setRecommendations] = useState<CalibrationRecommendation[]>([]);
+  const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
 
   // UI state
   const [isLoading, setIsLoading] = useState(true);
@@ -61,14 +66,16 @@ export function Dashboard({
       setIsLoading(true);
       setError(null);
 
-      // Fetch sites and profiles
-      const [sitesData, profilesData] = await Promise.all([
+      // Fetch sites, profiles, and engine logs
+      const [sitesData, profilesData, logsData] = await Promise.all([
         sitesApi.list(),
         profilesApi.list(),
+        systemApi.getLogs().catch(() => []),
       ]);
 
       setSites(sitesData);
       setProfiles(profilesData);
+      setSystemLogs(logsData);
 
       // Select active site
       const activeSiteId = selectedSiteId || (sitesData[0]?.id ?? null);
@@ -456,6 +463,90 @@ export function Dashboard({
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          {/* System Engine, Acknowledgements & Live Intelligence Feed */}
+          <div className="rounded-lg border border-border bg-surface p-4 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <Terminal size={16} className="text-primary" />
+                <h4 className="text-xs font-semibold text-foreground tracking-tight uppercase font-mono">
+                  System Engine & Intelligence Feed
+                </h4>
+                <Badge variant="primary" size="sm">LIVE TELEMETRY</Badge>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onNavigateTab('settings')}
+                  className="text-xs text-primary hover:text-primary-hover flex items-center gap-1 font-medium transition-colors"
+                >
+                  <span>Open System Console</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+
+            {/* Third-Party & AI Acknowledgements Badge Strip */}
+            <div className="p-3 rounded-lg bg-surface-secondary/40 border border-border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2.5">
+                <BookOpen size={16} className="text-primary shrink-0" />
+                <div>
+                  <span className="font-semibold text-foreground block">
+                    Third-Party, API & AI Citations Active
+                  </span>
+                  <span className="text-[11px] text-muted">
+                    Open-Meteo Weather API • Leaflet & OpenStreetMap GIS • Spring Boot 3 & Java 21 • Explainable AI (XAI) Reasoner
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Badge variant="success" size="sm">A-1 Launchpad Compliant</Badge>
+                <button
+                  onClick={() => onNavigateTab('settings')}
+                  className="text-[11px] text-primary hover:underline font-mono flex items-center gap-1"
+                >
+                  <span>View Details</span>
+                  <ExternalLink size={10} />
+                </button>
+              </div>
+            </div>
+
+            {/* Live Rule & AI Engine Logs Feed Ticker */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-[11px] text-muted font-mono">
+                <span>RECENT ENGINE EXECUTIONS (RULE & AI):</span>
+                <span>Port 8081 • Spring AOP Active</span>
+              </div>
+
+              <div className="bg-[#0b0f17] rounded-md border border-[#1f2937] p-2.5 space-y-1.5 font-mono text-[11px] text-gray-300 max-h-48 overflow-y-auto">
+                {systemLogs.slice(0, 4).map((log) => {
+                  const isRule = log.subsystem === 'RULE_ENGINE';
+                  const isAi = log.subsystem === 'AI_ENGINE';
+                  return (
+                    <div key={log.id} className="flex items-start gap-2 py-1 px-1.5 hover:bg-[#131b2a] rounded transition-colors">
+                      <span className="text-gray-500 text-[10px] shrink-0 pt-0.5">
+                        {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      </span>
+                      <span
+                        className={`px-1 rounded text-[9px] uppercase font-bold shrink-0 ${
+                          isRule
+                            ? 'bg-cyan-950 text-cyan-400 border border-cyan-800'
+                            : isAi
+                            ? 'bg-purple-950 text-purple-300 border border-purple-800'
+                            : 'bg-blue-950 text-blue-400 border border-blue-800'
+                        }`}
+                      >
+                        {log.subsystem}
+                      </span>
+                      <span className="text-gray-200 truncate flex-1">
+                        {log.message}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

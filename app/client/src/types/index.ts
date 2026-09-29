@@ -202,3 +202,28 @@ export interface SiteReport {
     reason: string;
   }>;
 }
+
+export interface SystemAcknowledgement {
+  id: string;
+  name: string;
+  category: string;
+  provider: string;
+  license: string;
+  url: string;
+  description: string;
+  roleInVigilSense: string;
+  version: string;
+}
+
+export interface SystemLog {
+  id: string;
+  timestamp: string;
+  subsystem: 'RULE_ENGINE' | 'AI_ENGINE' | 'WEATHER_API' | 'AUDIT_TRAIL';
+  level: 'INFO' | 'WARN' | 'SUCCESS' | 'RULE_EXEC' | 'AI_ANALYSIS';
+  source: string;
+  siteName: string;
+  sensorName: string;
+  message: string;
+  details: string;
+  metadata?: Record<string, any>;
+}

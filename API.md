@@ -18,6 +18,7 @@
 - [5. Atmospheric Weather Telemetry API](#5-atmospheric-weather-telemetry-api)
 - [6. Sensor Calibration & Recommendation API](#6-sensor-calibration--recommendation-api)
 - [7. Analytics & Tactical Reporting API](#7-analytics--tactical-reporting-api)
+- [8. System Diagnostics, Acknowledgements & Logs API](#8-system-diagnostics-acknowledgements--logs-api)
 
 ---
 
@@ -726,3 +727,151 @@ curl -X GET http://localhost:8081/api/v1/sites/1/reports
   }
 }
 ```
+
+---
+
+## 8. System Diagnostics, Acknowledgements & Logs API
+
+### 8.1 Third-Party, API & AI Acknowledgements
+Retrieves comprehensive third-party library, atmospheric dataset, GIS provider, and AI citations compliant with A-1 Launchpad case study guidelines.
+
+- **Method**: `GET`
+- **Path**: `/system/acknowledgements`
+
+#### Example Request
+```bash
+curl -X GET http://localhost:8081/api/v1/system/acknowledgements
+```
+
+#### Example Response (`200 OK`)
+```json
+{
+  "success": true,
+  "message": "OK",
+  "data": [
+    {
+      "id": "open-meteo",
+      "name": "Open-Meteo Weather API",
+      "category": "EXTERNAL_API",
+      "provider": "Open-Meteo GmbH",
+      "license": "Non-Commercial / Creative Commons Attribution 4.0",
+      "url": "https://open-meteo.com",
+      "description": "High-resolution open-source global atmospheric models providing hourly forecast and live observation telemetry.",
+      "roleInVigilSense": "Primary atmospheric data provider for wind speed, wind gusts, precipitation, temperature, relative humidity, and WMO storm classification.",
+      "version": "v1 / Forecast API"
+    },
+    {
+      "id": "leaflet-osm",
+      "name": "Leaflet & OpenStreetMap",
+      "category": "GIS_MAPPING",
+      "provider": "Leaflet & OpenStreetMap Foundation",
+      "license": "BSD 2-Clause / Open Database License (ODbL)",
+      "url": "https://leafletjs.com",
+      "description": "Lightweight open-source tactical mapping library integrated with collaborative worldwide OpenStreetMap raster tiles.",
+      "roleInVigilSense": "Zero-key GIS mapping engine providing continuous perimeter contour zoning (800m, 400m, 150m) and sensor geolocation without commercial API keys.",
+      "version": "Leaflet 1.9.4"
+    },
+    {
+      "id": "xai-llm-engine",
+      "name": "Explainable AI (XAI) & LLM Reasoning Engine",
+      "category": "AI_ENGINE",
+      "provider": "VigilSense Intelligence Subsystem",
+      "license": "Apache License 2.0",
+      "url": "https://github.com/Atharvkote/Vigil",
+      "description": "Contextual natural language explanation synthesis engine providing cyber-physical reasoning for all sensor sensitivity proposals.",
+      "roleInVigilSense": "Translates raw meteorological variables (wind turbulence, acoustic precipitation) and rule engine actions into plain-language SOC operator justifications.",
+      "version": "v1.0-Contextual"
+    },
+    {
+      "id": "deterministic-rule-engine",
+      "name": "Deterministic Calibration Engine v1.0",
+      "category": "RULE_ENGINE",
+      "provider": "VigilSense Engineering Core",
+      "license": "Apache License 2.0",
+      "url": "https://github.com/Atharvkote/Vigil",
+      "description": "Rule-matching algorithm based on the A-1 Launchpad case study with strict physical hardware boundary clamping.",
+      "roleInVigilSense": "Evaluates sensor profile thresholds against weather factors, computes directional adjustments (INCREASE/DECREASE), and pins values within [min, max].",
+      "version": "v1.0"
+    }
+  ]
+}
+```
+
+---
+
+### 8.2 Live System, Rule Engine & AI Engine Logs
+Aggregates live diagnostic entries across the Deterministic Rule Engine, Explainable AI Reasoner, Weather Ingestion Client, and Spring AOP Audit Interceptor.
+
+- **Method**: `GET`
+- **Path**: `/system/logs`
+
+#### Example Request
+```bash
+curl -X GET http://localhost:8081/api/v1/system/logs
+```
+
+#### Example Response (`200 OK`)
+```json
+{
+  "success": true,
+  "message": "OK",
+  "data": [
+    {
+      "id": "RULE-901",
+      "timestamp": "2026-09-28T10:30:10Z",
+      "subsystem": "RULE_ENGINE",
+      "level": "RULE_EXEC",
+      "source": "CalibrationEngine",
+      "siteName": "Mumbai Refinery Facility",
+      "sensorName": "North Fence Geophone Array",
+      "message": "RULE EVALUATED: Action DECREASE on 'sensitivity' -> target 55.0 (current: 75.0, clamped: 10.0-100.0)",
+      "details": "Wind speed 12.5 m/s exceeds threshold 8.0 m/s causing high fence resonance | Heavy precipitation (16.0 mm) induces acoustic surface disturbance",
+      "metadata": {
+        "action": "DECREASE",
+        "hardwareBounds": "[10.0, 100.0]",
+        "parameter": "sensitivity",
+        "recommendedValue": 55.0,
+        "riskLevel": "HIGH",
+        "ruleVersion": "1.0"
+      }
+    },
+    {
+      "id": "AI-901",
+      "timestamp": "2026-09-28T10:30:10.045Z",
+      "subsystem": "AI_ENGINE",
+      "level": "AI_ANALYSIS",
+      "source": "AiRecommendationService / LlmAiClient",
+      "siteName": "Mumbai Refinery Facility",
+      "sensorName": "North Fence Geophone Array",
+      "message": "AI EXPLANATION: Reduced sensitivity is recommended based on environmental factors.",
+      "details": "Current conditions include wind at 12.5 m/s and rainfall of 16.0 mm. These factors elevate the risk of environmental disturbances for a FENCE_VIBRATION sensor. The deterministic rule engine recommends a sensitivity range of 50.0 - 60.0 to mitigate this risk.",
+      "metadata": {
+        "recommendationId": 901,
+        "sensor": "North Fence Geophone Array",
+        "summary": "Reduced sensitivity is recommended based on environmental factors."
+      }
+    },
+    {
+      "id": "WX-502",
+      "timestamp": "2026-09-28T10:30:05Z",
+      "subsystem": "WEATHER_API",
+      "level": "WARN",
+      "source": "OpenMeteoClient",
+      "siteName": "Mumbai Refinery Facility",
+      "sensorName": "Weather Station",
+      "message": "TELEMETRY INGESTION: Temp 29.1°C, Wind 12.5 m/s (Gusts: 21.0 m/s), Rain 16.0 mm, Storm=true",
+      "details": "Observed at: 2026-09-28T10:30:00Z | Source: OPEN_METEO | Stale: false",
+      "metadata": {
+        "humidityPercent": 84.0,
+        "rainfallMm": 16.0,
+        "stormCondition": true,
+        "temperatureC": 29.1,
+        "weatherCode": 65,
+        "windGustMs": 21.0,
+        "windSpeedMs": 12.5
+      }
+    }
+  ]
+}
+```
+

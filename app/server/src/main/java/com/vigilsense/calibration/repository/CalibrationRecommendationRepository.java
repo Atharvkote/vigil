@@ -36,4 +36,14 @@ public interface CalibrationRecommendationRepository extends JpaRepository<Calib
             ORDER BY r.createdAt DESC
             """)
     List<CalibrationRecommendation> findAllBySensorIdOrderByCreatedAtDesc(@Param("sensorId") Long sensorId);
+
+    @Query("""
+            SELECT r FROM CalibrationRecommendation r
+            JOIN FETCH r.weatherRecord
+            JOIN FETCH r.sensorProfile
+            JOIN FETCH r.sensor s
+            JOIN FETCH s.site
+            ORDER BY r.createdAt DESC
+            """)
+    List<CalibrationRecommendation> findRecentRecommendations(Pageable pageable);
 }

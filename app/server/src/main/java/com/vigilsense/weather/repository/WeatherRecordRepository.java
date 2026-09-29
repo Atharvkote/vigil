@@ -18,4 +18,6 @@ public interface WeatherRecordRepository extends JpaRepository<WeatherRecord, Lo
             Instant to);
 
     List<WeatherRecord> findBySiteIdOrderByObservedAtDesc(Long siteId);
+
+    List<WeatherRecord> findTop20ByOrderByRetrievedAtDesc();
 }

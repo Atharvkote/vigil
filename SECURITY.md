@@ -2,7 +2,6 @@
 
 VigilSense is a Perimeter Intrusion Detection System (PIDS) atmospheric correlation and sensor calibration intelligence platform. Because perimeter security systems protect critical physical infrastructure (refineries, data centers, maritime terminals, border checkpoints), security, integrity, and tamper-resistance are paramount.
 
----
 
 ## 1. Supported Versions
 
@@ -13,7 +12,6 @@ Security updates and patches are actively maintained for the following versions:
 | **1.0.x** | :white_check_mark: Yes | September 2026 | Active / Current Baseline |
 | **< 1.0.0** | :x: No | Pre-release | Unsupported |
 
----
 
 ## 2. Reporting a Vulnerability
 
@@ -34,7 +32,6 @@ Please include the following in your report:
 3. Impact assessment (e.g., unauthorized parameter alteration, sensor blinding, denial of service).
 4. Suggested remediation or patch, if known.
 
----
 
 ## 3. Perimeter Intrusion Detection Threat Model
 
@@ -61,7 +58,6 @@ PIDS platforms are targeted by specialized physical and cyber-physical attack ve
   - Map presentation uses trusted OpenStreetMap tile servers with zero third-party commercial keys or tracking scripts.
   - Visual verification with continuous multi-tier perimeter zones (800m outer detection, 400m exclusion, 150m core zone) directly in the console.
 
----
 
 ## 4. Software Security Controls
 
@@ -82,7 +78,6 @@ PIDS platforms are targeted by specialized physical and cyber-physical attack ve
 - Maven and npm dependencies are scanned against the National Vulnerability Database (NVD) and GitHub Advisory Database.
 - Strict module imports and TypeScript type safety eliminate prototype pollution and unchecked runtime exceptions.
 
----
 
 ## 5. Security Checklist for Deployments
 

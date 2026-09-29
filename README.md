@@ -11,7 +11,6 @@
 
 **VigilSense** is an enterprise-grade Perimeter Intrusion Detection System (PIDS) atmospheric correlation and dynamic calibration recommendation platform. It autonomously monitors meteorological conditions surrounding critical infrastructure facilities (refineries, data centers, maritime ports, high-security perimeters) and calculates mathematically safe, profile-pinned sensor sensitivity adjustments to suppress False Alarm Rates (FAR) while eliminating Nuisance Alarm Rates (NAR) and perimeter detection blind spots.
 
----
 
 ## 📑 Table of Contents
 
@@ -30,7 +29,6 @@
 - [Security](#-security)
 - [License](#-license)
 
----
 
 ## 🎯 Executive Summary
 
@@ -47,7 +45,6 @@ Without intelligent calibration, Security Operations Centers (SOCs) experience:
 - **Explainable AI Justification**: Contextual natural language explanations generated for every proposed calibration adjustment.
 - **Audit-Logged Operator Confirmation**: Zero unverified parameter shifts; all adjustments maintain complete cryptographic and AOP audit trails.
 
----
 
 ## ⚡ Key Features
 
@@ -58,7 +55,6 @@ Without intelligent calibration, Security Operations Centers (SOCs) experience:
 - **📊 Predictive Analytics & Correlation Matrix**: Live telemetry charting, False Alarm Rate (FAR) reduction metrics, and downloadable operational compliance reports.
 - **🛡️ Enterprise SOC Hardening**: Role-based access control readiness, CORS domain whitelisting, SQL-injection prevention, and Spring AOP audit interceptors.
 
----
 
 ## 🏗️ System Architecture
 
@@ -99,7 +95,6 @@ flowchart TD
 
 For complete technical specifications, class hierarchies, and database entity relationships, refer to [ARCHITECTURE.md](ARCHITECTURE.md).
 
----
 
 ## 💻 Tech Stack
 
@@ -111,7 +106,6 @@ For complete technical specifications, class hierarchies, and database entity re
 | **External APIs** | Open-Meteo Weather API (Open-source, no API key required) |
 | **DevOps & Tooling** | Docker, Docker Compose, Maven 3.9+, Node.js 20+ |
 
----
 
 ## 🚀 Getting Started
 
@@ -123,7 +117,6 @@ Ensure the following tools are installed on your workstation:
 - **Node.js**: 20+ (LTS) & **npm**: 10+
 - **PostgreSQL**: 15+ (or Docker)
 
----
 
 ### Port Configuration
 
@@ -135,7 +128,6 @@ VigilSense is configured to operate on standardized development ports:
 | **Backend API** | HTTP | `http://localhost:8081` | `SERVER_PORT=8081` | [`app/server/.env`](app/server/.env), [`application.yml`](app/server/src/main/resources/application.yml) |
 | **Database** | TCP | `localhost:5432` | `DATABASE_URL` | [`app/server/.env`](app/server/.env) |
 
----
 
 ### Local Development Setup
 
@@ -168,7 +160,6 @@ npm run dev
 ```
 *Open your browser and navigate to `http://localhost:5173`.*
 
----
 
 ### Docker Compose Deployment
 
@@ -188,7 +179,6 @@ To shut down the environment:
 docker-compose down -v
 ```
 
----
 
 ## 📁 Project Directory Layout
 
@@ -234,7 +224,6 @@ Vigil/
 └── docker-compose.yml               # Container orchestration definition
 ```
 
----
 
 ## 📚 Documentation Suite
 
@@ -242,14 +231,15 @@ For deeper exploration of system capabilities, review the dedicated guides:
 
 | Document | Purpose |
 | :--- | :--- |
+| **[WORKFLOW.md](WORKFLOW.md)** | Operational walkthrough, step-by-step user guide, standard operating procedures, and tactical scenarios. |
 | **[ARCHITECTURE.md](ARCHITECTURE.md)** | Deep architectural breakdown, data flow sequence diagrams, clamping algorithms, and database ER models. |
 | **[API.md](API.md)** | Full REST endpoint reference, JSON request/response schemas, HTTP status codes, and curl examples. |
 | **[SECURITY.md](SECURITY.md)** | PIDS threat model, sensor blinding defense, tamper resistance, and vulnerability disclosure SLAs. |
+| **[PROJECT_COMPLETION_REPORT.md](PROJECT_COMPLETION_REPORT.md)** | Final verification and acceptance report validating all 15 SRD criteria. |
 | **[SRD.md](SRD.md)** | Official Software Requirements Specification derived from the A-1 Launchpad case study. |
 | **[LICENSE](LICENSE)** | Apache License 2.0 terms and conditions. |
 | **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** | Contributor community standards and enforcement guidelines. |
 
----
 
 ## 🤝 Contributing
 
@@ -263,13 +253,11 @@ We welcome contributions from security engineers, systems architects, and open-s
 
 Please review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before participating in discussions.
 
----
 
 ## 🔒 Security
 
 For instructions on reporting security vulnerabilities or reviewing our perimeter cyber-physical threat model, consult [SECURITY.md](SECURITY.md).
 
----
 
 ## 📄 License
 

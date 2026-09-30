@@ -1,4 +1,4 @@
-# VigilSense
+# V I G I L
 
 **Weather-Based Sensor Calibration Suggestion System**
 Software Requirements Specification (SRD/SRS) — Version 1.0 — 27 September 2026

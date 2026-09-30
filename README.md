@@ -1,4 +1,4 @@
-# VigilSense — Perimeter Intrusion Detection & Weather Calibration Intelligence
+# V I G I L — Perimeter Intrusion Detection & Weather Calibration Intelligence
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
